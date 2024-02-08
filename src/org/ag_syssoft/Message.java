@@ -1,5 +1,6 @@
 package org.ag_syssoft;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -9,9 +10,14 @@ import java.util.Map;
 
 public class Message {
 
-    public Message () {
+    public Message ( boolean controlMessage ) {
         header = new HashMap<>();
         payload = new HashMap<>();
+        this.controlMessage = controlMessage;
+    }
+
+    public Message () {
+        this(false);
     }
 
     public Message add ( String key, String value ) {
@@ -51,6 +57,11 @@ public class Message {
         return header;
     }
 
+
+    public boolean isControlMessage () {
+        return controlMessage;
+    }
+
     public String toJson () throws JsonProcessingException {
         return serializer.writeValueAsString(this);
     }
@@ -59,6 +70,7 @@ public class Message {
         return serializer.readValue(s,Message.class);
     }
 
+    private final boolean controlMessage;
     private final HashMap<String,String> header;
     private final HashMap<String,String> payload;
     private static final ObjectMapper serializer = new ObjectMapper();

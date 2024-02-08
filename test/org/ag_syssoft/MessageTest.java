@@ -19,15 +19,22 @@ class MessageTest {
         assertEquals("value", message.query("payload_key"));
         assertNull(message.query("non_existent_key"));
         assertNull(message.queryHeader("payload_key"));
+        assertFalse(message.isControlMessage());
+    }
+
+    @Test
+    void controlMessage() {
+        Message controlMessage = new Message(true);
+        assertTrue(controlMessage.isControlMessage());
     }
 
     @Test
     void fluentAPI() {
-        message.add("payload_key", "value").addHeader("header_key", "value").add("payload_int", 1).addHeader("header_int", 1);
+        message.add("payload_key", "value").addHeader("header_key", "value").add("payload_int", 1).addHeader("header_int", 2);
         assertEquals("value", message.query("payload_key"));
         assertEquals("value", message.queryHeader("header_key"));
         assertEquals("1", message.query("payload_int"));
-        assertEquals("1", message.queryHeader("header_int"));
+        assertEquals("2", message.queryHeader("header_int"));
     }
     @Test
     void addHeaderAndQueryHeader() {
@@ -42,7 +49,8 @@ class MessageTest {
         message.add("payload_key", "value");
         message.addHeader("header_key", "value");
         String json = message.toJson();
-        assertEquals("{\"header\":{\"header_key\":\"value\"},\"payload\":{\"payload_key\":\"value\"}}", json);
+        // System.out.println(json);
+        assertEquals("{\"controlMessage\":false,\"header\":{\"header_key\":\"value\"},\"payload\":{\"payload_key\":\"value\"}}", json);
         Message deserialized = Message.fromJson(json);
         assertEquals(message.getPayload(), deserialized.getPayload());
         assertEquals(message.getHeader(), deserialized.getHeader());
