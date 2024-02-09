@@ -1,6 +1,5 @@
-package org.ag_syssoft;
+package org.oxoo2a.sim4da;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
