@@ -40,8 +40,10 @@ public class Network {
             logger.error("Attempt to send message to non-existent node " + receiver_name);
             throw new UnknownNodeException(receiver_name);
         }
+        Message copy = new Message(message);
+        copy.addHeader("sender", sender.NodeName());
         NodeProxy receiver = nodes.get(receiver_name).np;
-        receiver.deliver(message, sender);
+        receiver.deliver(copy, sender);
         logger.debug("Sending unicast message from " + sender.NodeName() + " to " + receiver_name);
     }
 

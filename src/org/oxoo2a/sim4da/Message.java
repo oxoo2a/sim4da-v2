@@ -14,6 +14,14 @@ public class Message {
         addCategory("Payload");
     }
 
+    public Message ( Message other ) {
+        content = new HashMap<>();
+        content.putAll(other.content);
+        for (String category : other.content.keySet()) {
+            content.put(category,new HashMap<>());
+            content.get(category).putAll(other.content.get(category));
+        }
+    }
     public void addCategory ( String category ) {
         if (content.containsKey(category)) {
             System.err.println("Adding category " + category + " twice! Ignoring.");
@@ -101,6 +109,7 @@ public class Message {
         }
         return result;
     }
-    private final Map<String, Map<String,String>> content = new HashMap<>();
+
+    private Map<String, Map<String,String>> content = new HashMap<>();
     private static final ObjectMapper serializer = new ObjectMapper();
 }
