@@ -3,7 +3,7 @@ package org.oxoo2a.sim4da;
 import org.junit.jupiter.api.Test;
 
 class TokenRingTest {
-    public class TokenRingNode {
+    public static class TokenRingNode {
         public TokenRingNode( int id, int next_id ) {
             this.id = id;
             this.name = "TokenRingNode" + id;
@@ -23,6 +23,7 @@ class TokenRingTest {
             int loop_counter = 0;
             while (true) {
                 m = nc.receive();
+                System.out.println("TokenRingNode" + id + " received message from " + m.queryHeader("sender"));
                 loop_counter++;
                 String value = m.query("token");
                 if (value.equals("end")) {
@@ -50,7 +51,7 @@ class TokenRingTest {
     void testTokenRing() {
         final int ringSize = 5;
         Simulator simulator = Simulator.getInstance();
-        TokenRingNode nodes[] = new TokenRingNode[ringSize];
+        TokenRingNode[] nodes = new TokenRingNode[ringSize];
         for (int i = 0; i < ringSize; i++) {
             nodes[i] = new TokenRingNode(i, (i+1) % ringSize);
         }
