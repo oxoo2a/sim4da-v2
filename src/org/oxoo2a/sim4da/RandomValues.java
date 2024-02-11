@@ -4,13 +4,11 @@ import java.util.function.Supplier;
 
 public class RandomValues {
 
-    public RandomValues ( double min_value, double max_value, Supplier<Double> distributionFunction ) {
-        this.min_value = min_value;
-        this.max_value = max_value;
+    public RandomValues ( Supplier<Double> distributionFunction ) {
         this.distributionFunction = distributionFunction;
     }
 
-    public double getDouble() {
+    public double getDouble( double min_value, double max_value ) {
         double v = distributionFunction.get();
         if (v < 0 || v > 1) {
             System.err.println("Distribution function must return a value between 0 and 1");
@@ -19,8 +17,8 @@ public class RandomValues {
         return min_value + Math.random() * (max_value - min_value);
     }
 
-    public long getLong () {
-        return (long) getDouble();
+    public long getLong ( long min_value, long max_value ) {
+        return (long) getDouble(min_value, max_value);
     }
 
     public static Supplier<Double> getUniformDistribution() {
@@ -40,7 +38,5 @@ public class RandomValues {
         };
     }
 
-    private double min_value;
-    private double max_value;
     private Supplier<Double> distributionFunction;
 }

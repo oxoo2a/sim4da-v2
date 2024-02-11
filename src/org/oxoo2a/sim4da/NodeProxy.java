@@ -26,10 +26,14 @@ public class NodeProxy {
                 try {
                     messages.wait();
                 } catch (InterruptedException e) {
+                    // TODO Signal associated NetworkConnection that the simulation is shutting down
                     e.printStackTrace();
                 }
             }
-            return messages.removeFirst().message;
+            int candidate_index = SimulationBehavior.selectMessageInQueue(messages.size());
+            Message candidate = messages.remove(candidate_index).message;
+            // TODO How to return send sender address as well?
+            return candidate;
         }
     }
     private record ReceivedMessage ( Message message, NetworkConnection sender ) {};

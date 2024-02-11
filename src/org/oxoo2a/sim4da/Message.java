@@ -69,6 +69,13 @@ public class Message {
         return serializer.readValue(s,Message.class);
     }
 
+    public String toString () {
+        try {
+            return toJson();
+        } catch (JsonProcessingException e) {
+            return "Unable to serialize message";
+        }
+    }
     private final boolean controlMessage;
     private final HashMap<String,String> header;
     private final HashMap<String,String> payload;

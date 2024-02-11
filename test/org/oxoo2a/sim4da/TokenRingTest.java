@@ -7,11 +7,14 @@ class TokenRingTest {
         public TokenRingNode( int id, int next_id ) {
             this.id = id;
             this.name = "TokenRingNode" + id;
-            nc = new NetworkConnection(name);
             this.next_id = next_id;
+            nc = new NetworkConnection(name);
         }
 
-        public void start() {
+        public void engage () {
+            nc.engage(this::start);
+        }
+        private void start() {
             Message m = new Message().add("token", "start");
             try {
                 nc.send(m, "TokenRingNode" + next_id);
@@ -37,7 +40,7 @@ class TokenRingTest {
             nodes[i] = new TokenRingNode(i, (i+1) % ringSize);
         }
         for (TokenRingNode n : nodes) {
-            n.start();
+            n.engage();
         }
         try {
             Thread.sleep(1000);
