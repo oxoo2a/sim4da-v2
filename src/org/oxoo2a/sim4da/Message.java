@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO Allow for various sections inside a mesaage including a header and a payload
 public class Message {
 
     public Message ( boolean controlMessage ) {
@@ -44,8 +45,16 @@ public class Message {
         return payload.get(key);
     }
 
+    public int queryInteger ( String key ) {
+        return Integer.parseInt(payload.get(key));
+    }
+
     public String queryHeader ( String key ) {
         return header.get(key);
+    }
+
+    public int queryHeaderInteger ( String key ) {
+        return Integer.parseInt(header.get(key));
     }
 
     public Map<String,String> getPayload () {

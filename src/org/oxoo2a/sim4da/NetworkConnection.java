@@ -22,6 +22,13 @@ public class NetworkConnection {
     public void send ( Message message, String to_node_name ) throws UnknownNodeException {
         network.send(message, this, to_node_name);
     }
+
+    public void sendBlindly ( Message message, String to_node_name ) {
+        try {
+            send(message, to_node_name);
+        }
+        catch (Exception e) {};
+    }
     private final String node_name;
     private final Simulator simulator = Simulator.getInstance();
     private final Network network = Network.getInstance();

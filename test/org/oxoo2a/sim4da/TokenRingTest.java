@@ -15,15 +15,30 @@ class TokenRingTest {
             nc.engage(this::start);
         }
         private void start() {
-            Message m = new Message().add("token", "start");
-            try {
-                nc.send(m, "TokenRingNode" + next_id);
+            Message m;
+            if (id == 0) {
+                m = new Message().add("token", 0);
+                nc.sendBlindly(m, "TokenRingNode" + next_id);
             }
-            catch (UnknownNodeException e) {
-                e.printStackTrace();
+            int loop_counter = 0;
+            while (true) {
+                m = nc.receive();
+                loop_counter++;
+                String value = m.query("token");
+                if (value.equals("end")) {
+                    nc.sendBlindly(m, "TokenRingNode" + next_id);
+                    break;
+                }
+                if (loop_counter > 10) {
+                    m = new Message().add("token", "end");
+                    nc.sendBlindly(m, "TokenRingNode" + next_id);
+                    break;
+                }
+                int v = m.queryInteger("token");
+                System.out.println(name + " received token " + value);
+                m = new Message().add("token", v + 1);
+                nc.sendBlindly(m, "TokenRingNode" + next_id);
             }
-            m = nc.receive();
-            System.out.println(m);
         }
         private final NetworkConnection nc;
         private final String name;
