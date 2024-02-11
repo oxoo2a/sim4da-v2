@@ -1,6 +1,5 @@
-package org.ag_syssoft;
+package org.oxoo2a.sim4da;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -8,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO Allow for various sections inside a mesaage including a header and a payload
 public class Message {
 
     public Message ( boolean controlMessage ) {
@@ -45,8 +45,16 @@ public class Message {
         return payload.get(key);
     }
 
+    public int queryInteger ( String key ) {
+        return Integer.parseInt(payload.get(key));
+    }
+
     public String queryHeader ( String key ) {
         return header.get(key);
+    }
+
+    public int queryHeaderInteger ( String key ) {
+        return Integer.parseInt(header.get(key));
     }
 
     public Map<String,String> getPayload () {
@@ -70,6 +78,13 @@ public class Message {
         return serializer.readValue(s,Message.class);
     }
 
+    public String toString () {
+        try {
+            return toJson();
+        } catch (JsonProcessingException e) {
+            return "Unable to serialize message";
+        }
+    }
     private final boolean controlMessage;
     private final HashMap<String,String> header;
     private final HashMap<String,String> payload;

@@ -1,4 +1,4 @@
-package org.ag_syssoft;
+package org.oxoo2a.sim4da;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
