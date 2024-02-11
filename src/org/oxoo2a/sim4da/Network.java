@@ -10,7 +10,7 @@ public class Network {
     private Network() {
     }
 
-    private record Node ( NetworkConnection nc, NodeProxy np ) {};
+    private record Node ( NetworkConnection nc, NodeProxy np ) {}
     private final Map<String,Node> nodes = new HashMap<>();
     private final Logger logger = LoggerFactory.getLogger(Network.class);
     private static Network instance = null;
@@ -25,9 +25,9 @@ public class Network {
         return instance;
     }
 
-    public void registerConnection(NetworkConnection networkConnection) {
+    public void registerConnection(NetworkConnection networkConnection, NodeProxy nodeProxy) {
         logger.debug("Registering connection for " + networkConnection.NodeName());
-        Node n = new Node(networkConnection, new NodeProxy(networkConnection));
+        Node n = new Node(networkConnection, nodeProxy);
         nodes.put(networkConnection.NodeName(), n);
     }
 
@@ -45,7 +45,7 @@ public class Network {
         logger.debug("Sending unicast message from " + sender.NodeName() + " to " + receiver_name);
     }
 
-    public void send ( Message message, NetworkConnection sender ) throws UnknownNodeException {
+    public void send ( Message message, NetworkConnection sender ) {
         for (Node n : nodes.values()) {
             if (n.nc != sender) {
                 n.np.deliver(message, sender);

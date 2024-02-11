@@ -2,9 +2,11 @@ package org.oxoo2a.sim4da;
 
 public class NetworkConnection {
 
-    protected NetworkConnection(String node_name ) {
+
+    public NetworkConnection(String node_name ) {
         this.node_name = node_name;
-        network.registerConnection(this);
+        peer = new NodeProxy(this);
+        network.registerConnection(this,peer);
     }
 
     public String NodeName () {
@@ -33,4 +35,5 @@ public class NetworkConnection {
     private final Simulator simulator = Simulator.getInstance();
     private final Network network = Network.getInstance();
     private Thread thread = null;
+    private final NodeProxy peer;
 }
