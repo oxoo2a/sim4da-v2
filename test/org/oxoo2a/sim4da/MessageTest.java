@@ -19,13 +19,6 @@ class MessageTest {
         assertEquals("value", message.query("payload_key"));
         assertNull(message.query("non_existent_key"));
         assertNull(message.queryHeader("payload_key"));
-        assertFalse(message.isControlMessage());
-    }
-
-    @Test
-    void controlMessage() {
-        Message controlMessage = new Message(true);
-        assertTrue(controlMessage.isControlMessage());
     }
 
     @Test
@@ -49,8 +42,8 @@ class MessageTest {
         message.add("payload_key", "value");
         message.addHeader("header_key", "value");
         String json = message.toJson();
-        // System.out.println(json);
-        assertEquals("{\"controlMessage\":false,\"header\":{\"header_key\":\"value\"},\"payload\":{\"payload_key\":\"value\"}}", json);
+        System.out.println(json);
+        assertEquals("{\"payload\":{\"payload_key\":\"value\"},\"header\":{\"header_key\":\"value\"}}", json);
         Message deserialized = Message.fromJson(json);
         assertEquals(message.getPayload(), deserialized.getPayload());
         assertEquals(message.getHeader(), deserialized.getHeader());
