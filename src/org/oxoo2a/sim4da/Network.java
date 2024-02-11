@@ -44,7 +44,6 @@ public class Network {
         copy.addHeader("sender", sender.NodeName());
         NodeProxy receiver = nodes.get(receiver_name).np;
         receiver.deliver(copy, sender);
-        logger.debug("Sending unicast message from " + sender.NodeName() + " to " + receiver_name);
     }
 
     public void send ( Message message, NetworkConnection sender ) {
@@ -53,13 +52,11 @@ public class Network {
                 n.np.deliver(message, sender);
             }
         }
-        logger.debug("Sending broadcast message from " + sender.NodeName());
     }
 
     public Message receive(NetworkConnection receiver) {
         Node n = nodes.get(receiver.NodeName());
         Message m = n.np.receive();
-        logger.debug("Receiving message for " + receiver.NodeName());
         return m;
     }
 }
