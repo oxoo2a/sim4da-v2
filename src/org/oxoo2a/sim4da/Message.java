@@ -7,68 +7,89 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO Allow for various sections inside a mesaage including a header and a payload
 public class Message {
 
-    public Message ( boolean controlMessage ) {
-        header = new HashMap<>();
-        payload = new HashMap<>();
-        this.controlMessage = controlMessage;
-    }
-
     public Message () {
-        this(false);
+        addCategory("Header");
+        addCategory("Payload");
     }
 
-    public Message add ( String key, String value ) {
-        payload.put(key,value);
+    public Message ( Message other ) {
+        content = new HashMap<>();
+        content.putAll(other.content);
+        for (String category : other.content.keySet()) {
+            content.put(category,new HashMap<>());
+            content.get(category).putAll(other.content.get(category));
+        }
+    }
+    public void addCategory ( String category ) {
+        if (content.containsKey(category)) {
+            System.err.println("Adding category " + category + " twice! Ignoring.");
+            return;
+        }
+        content.put(category,new HashMap<>());
+    }
+
+    public void removeCategory ( String category ) {
+        if (category.equals("Header") || category.equals("Payload")) {
+            System.err.println("Cannot remove category " + category + "!");
+            return;
+        }
+        if (!content.containsKey(category)) {
+            System.err.println("Removing non-existent category " + category + "!");
+            return;
+        }
+        content.remove(category);
+    }
+
+    public Message addWithCategory(String category, String key, String value ) {
+        content.get(category).put(key,value);
         return this;
+    }
+    public Message add ( String key, String value ) {
+        return addWithCategory("Payload",key,value);
     }
 
     public Message add ( String key, int value ) {
-        payload.put(key,String.valueOf(value));
-        return this;
-
+        return addWithCategory("Payload",key,String.valueOf(value));
     }
 
     public Message addHeader ( String key, String value ) {
-        header.put(key,value);
-        return this;
+        return addWithCategory("Header",key,value);
     }
 
     public Message addHeader ( String key, int value ) {
-        header.put(key,String.valueOf(value));
-        return this;
+        return addWithCategory("Header",key,String.valueOf(value));
+    }
+
+    public String queryWithCategory(String category, String key ) {
+        return content.get(category).get(key);
     }
 
     public String query ( String key ) {
-        return payload.get(key);
+        return queryWithCategory("Payload",key);
     }
 
     public int queryInteger ( String key ) {
-        return Integer.parseInt(payload.get(key));
+        return Integer.parseInt(queryWithCategory("Payload",key));
     }
 
     public String queryHeader ( String key ) {
-        return header.get(key);
+        return queryWithCategory("Header",key);
     }
 
     public int queryHeaderInteger ( String key ) {
-        return Integer.parseInt(header.get(key));
+        return Integer.parseInt(queryWithCategory("Header",key));
     }
 
     public Map<String,String> getPayload () {
-        return payload;
+        return content.get("Payload");
     }
 
     public Map<String,String> getHeader () {
-        return header;
+        return content.get("Header");
     }
 
-
-    public boolean isControlMessage () {
-        return controlMessage;
-    }
 
     public String toJson () throws JsonProcessingException {
         return serializer.writeValueAsString(this);
@@ -78,15 +99,17 @@ public class Message {
         return serializer.readValue(s,Message.class);
     }
 
+    @Override
     public String toString () {
+        String result;
         try {
-            return toJson();
+            result = toJson();
         } catch (JsonProcessingException e) {
-            return "Unable to serialize message";
+            result = "Unable to serialize message";
         }
+        return result;
     }
-    private final boolean controlMessage;
-    private final HashMap<String,String> header;
-    private final HashMap<String,String> payload;
+
+    private Map<String, Map<String,String>> content = new HashMap<>();
     private static final ObjectMapper serializer = new ObjectMapper();
 }
