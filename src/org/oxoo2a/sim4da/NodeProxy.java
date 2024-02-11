@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-// Each NodeProxy is associated with a NetworkConnection and is responsible for all the node
-// functionality visible to the Network. Adding that functionality to the NetworkConnection
-// would add methods that should not be accessible to the actual simulation of a
-// distributed algorithm.
 public class NodeProxy {
     public NodeProxy ( NetworkConnection nc ) {
         this.nc = nc;
@@ -32,7 +28,7 @@ public class NodeProxy {
             }
             int candidate_index = SimulationBehavior.selectMessageInQueue(messages.size());
             Message candidate = messages.remove(candidate_index).message;
-            // TODO How to return send sender address as well?
+            // TODO How to return send sender address as well? Message categories maybe?
             return candidate;
         }
     }
