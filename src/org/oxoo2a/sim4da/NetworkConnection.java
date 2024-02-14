@@ -37,7 +37,7 @@ public class NetworkConnection {
         try {
             send(message, to_node_name);
         }
-        catch (Exception e) {};
+        catch (Exception e) {}
     }
 
     public void send ( Message message ) {
