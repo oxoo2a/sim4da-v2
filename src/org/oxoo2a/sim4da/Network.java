@@ -59,4 +59,7 @@ public class Network {
         Message m = n.np.receive();
         return m;
     }
+
+    public void shutdown() {
+    }
 }

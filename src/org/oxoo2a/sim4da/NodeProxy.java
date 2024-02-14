@@ -28,7 +28,6 @@ public class NodeProxy {
             }
             int candidate_index = SimulationBehavior.selectMessageInQueue(messages.size());
             Message candidate = messages.remove(candidate_index).message;
-            // TODO How to return send sender address as well? Message categories maybe?
             return candidate;
         }
     }

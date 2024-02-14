@@ -31,6 +31,7 @@ public class Simulator {
     }
 
     public void shutdown () {
+        Network.getInstance().shutdown();
         logger.info(version + " - Simulation ended.");
     }
     private static Simulator instance = null;
