@@ -45,6 +45,10 @@ public class NetworkConnection {
         network.send(message, this);
     }
 
+    public Logger getLogger() {
+        return logger;
+    }
+
     private final String node_name;
     private final Simulator simulator = Simulator.getInstance();
     private final Network network = Network.getInstance();

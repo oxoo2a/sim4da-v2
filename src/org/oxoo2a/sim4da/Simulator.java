@@ -22,6 +22,14 @@ public class Simulator {
         return instance;
     }
 
+    public void simulate ( long duration ) {
+        try {
+            Thread.sleep(duration * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void shutdown () {
         logger.info(version + " - Simulation ended.");
     }
