@@ -3,6 +3,7 @@ package org.oxoo2a.sim4da;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class Simulator {
@@ -36,6 +37,14 @@ public class Simulator {
         simulating = false;
     }
 
+    public void simulate () {
+        simulating = true;
+        startSignal.countDown();
+        List<NetworkConnection> ncs = Network.getInstance().getAllNetworkConnections();
+        for (NetworkConnection nc : ncs) {
+            nc.join();
+        }
+    }
     public void shutdown () {
         Network.getInstance().shutdown();
         logger.info(version + " - Simulation ended.");

@@ -3,8 +3,11 @@ package org.oxoo2a.sim4da;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+
 public class Network {
 
     private Network() {
@@ -29,6 +32,14 @@ public class Network {
         logger.debug("Registering connection for " + networkConnection.NodeName());
         Node n = new Node(networkConnection, nodeProxy);
         nodes.put(networkConnection.NodeName(), n);
+    }
+
+    public List<NetworkConnection> getAllNetworkConnections () {
+        List<NetworkConnection> ncs = new ArrayList<>(numberOfNodes());
+        for (Node n : nodes.values()) {
+            ncs.add(n.nc);
+        }
+        return ncs;
     }
 
     public int numberOfNodes() {

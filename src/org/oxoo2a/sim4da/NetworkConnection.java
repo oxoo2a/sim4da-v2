@@ -28,7 +28,14 @@ public class NetworkConnection {
         if (simulator.isSimulating())
             node_main.run();
     }
-    
+
+    public void join () {
+        try {
+            thread.join();
+        }
+        catch (InterruptedException e) {}
+    }
+
     public Message receive () {
         Message m = network.receive(this);
         logger.debug("Received message from "+m.queryHeader("sender"));
