@@ -23,6 +23,7 @@ public class Simulator {
     }
 
     public void simulate ( long duration ) {
+        simulating = true;
         try {
             Thread.sleep(duration * 1000);
         } catch (InterruptedException e) {
@@ -34,6 +35,11 @@ public class Simulator {
         Network.getInstance().shutdown();
         logger.info(version + " - Simulation ended.");
     }
+
+    public boolean isSimulating() {
+        return simulating;
+    }
     private static Simulator instance = null;
     private final Logger logger;
+    private boolean simulating = false;
 }

@@ -14,6 +14,7 @@ class TokenRingTest {
         public void engage () {
             nc.engage(this::start);
         }
+
         private void start() {
             Message m;
             if (id == 0) {
