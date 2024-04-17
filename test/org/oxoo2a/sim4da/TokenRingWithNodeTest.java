@@ -49,8 +49,9 @@ class TokenRingWithNodeTest {
             String node_name = "TokenRingNode_" + i;
             String next_node = "TokenRingNode_" + (i+1) % ringSize;
             nodes[i] = new TokenRingNode(node_name, next_node);
+            nodes[i].sleep(1000);
         }
-        simulator.simulate(1);
+        simulator.simulate(2);
         simulator.shutdown();
     }
 }

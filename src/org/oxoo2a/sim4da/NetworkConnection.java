@@ -18,10 +18,17 @@ public class NetworkConnection {
     }
 
     public void engage ( Runnable node_main ) {
-        thread = new Thread(node_main);
+        this.node_main = node_main;
+        thread = new Thread(this::node_main_base);
         thread.start();
     }
 
+    private void node_main_base() {
+        simulator.awaitSimulationStart();
+        if (simulator.isSimulating())
+            node_main.run();
+    }
+    
     public Message receive () {
         Message m = network.receive(this);
         logger.debug("Received message from "+m.queryHeader("sender"));
@@ -55,4 +62,5 @@ public class NetworkConnection {
     private Thread thread = null;
     private final NodeProxy peer;
     private final Logger logger;
+    private Runnable node_main = null;
 }

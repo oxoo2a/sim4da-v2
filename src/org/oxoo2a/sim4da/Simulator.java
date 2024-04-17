@@ -2,6 +2,9 @@ package org.oxoo2a.sim4da;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.CountDownLatch;
+
 public class Simulator {
     private final String version = "sim4da V2.0";
     private  Simulator () {
@@ -22,13 +25,15 @@ public class Simulator {
         return instance;
     }
 
-    public void simulate ( long duration ) {
+    public void simulate ( long duration_in_seconds ) {
         simulating = true;
+        startSignal.countDown();
         try {
-            Thread.sleep(duration * 1000);
+            Thread.sleep(duration_in_seconds * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        simulating = false;
     }
 
     public void shutdown () {
@@ -42,4 +47,13 @@ public class Simulator {
     private static Simulator instance = null;
     private final Logger logger;
     private boolean simulating = false;
+    private final CountDownLatch startSignal = new CountDownLatch(1);
+
+    public void awaitSimulationStart() {
+        if (simulating) return;
+        try {
+            startSignal.await();
+        }
+        catch (InterruptedException e) {}
+    }
 }
